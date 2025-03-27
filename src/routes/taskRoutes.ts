@@ -4,7 +4,8 @@ import { TaskController } from "../controllers/TaskController";
 const router = Router();
 // GET
 router.get("/", TaskController.getTasks);
-router.get("/:id", TaskController.getTask);
+router.get("/:id", TaskController.getTaskById);
+router.get("/user/:id", TaskController.getTaskByUserId);
 //POST
 router.post("/", TaskController.createTask);
 // PUT

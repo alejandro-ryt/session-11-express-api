@@ -8,6 +8,7 @@ const filePath = path.join(__dirname, "../../data/tasks.json");
 // https://www.typescriptlang.org/play/?#example/types-vs-interfaces
 interface Task {
     id: string;
+    createdBy: string;
     title: string;
     deadline: Date;
     label: string;
@@ -40,11 +41,16 @@ export class TaskModel {
         return readTasks().find((task) => task.id === id);
     }
 
-    static create(title: string, deadline: Date, label: string, status: "toDo" | "inProgress" | "done"): Task {
+    static getByUserId(userId: string): Task[] {
+        // Filter for the task that match the id inside the tasks array
+        return readTasks().filter((task) => task.createdBy === userId);
+    }
+
+    static create(title: string, createdBy: string, deadline: Date, label: string, status: "toDo" | "inProgress" | "done"): Task {
         // Get the array of tasks based on the returned value of the function "readTasks"
         const tasks = readTasks();
         // Define the new Task obj
-        const newTask: Task = { id: uuidv4(), title, deadline, label, status };
+        const newTask: Task = { id: uuidv4(), title, createdBy, deadline, label, status };
         // Push the new task into the
         tasks.push(newTask);
         // Write tasks array into the store file
@@ -55,6 +61,7 @@ export class TaskModel {
     static update(
         id: string,
         title: string,
+        createdBy: string,
         deadline: Date,
         label: string,
         status: "toDo" | "inProgress" | "done"
@@ -66,6 +73,7 @@ export class TaskModel {
         if (!task) return null;
         // Check for undefined values on new updated data and assign values
         if (title !== undefined) task.title = title;
+        if (createdBy !== undefined) task.title = createdBy;
         if (deadline !== undefined) task.deadline = deadline;
         if (label !== undefined) task.label = label;
         if (status !== undefined) task.status = status;

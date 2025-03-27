@@ -8,28 +8,35 @@ export class TaskController {
     }
 
     // Method to get a specific task by id
-    static getTask(req: Request, res: Response) {
+    static getTaskById(req: Request, res: Response) {
         const task = TaskModel.getById(String(req.params.id));
         task ? res.json(task) : res.status(404).json({ message: "Task not found" });
     }
 
+    // Method to get a specific task by id
+    static getTaskByUserId(req: Request, res: Response) {
+        const task = TaskModel.getByUserId(String(req.params.id));
+        task ? res.json(task) : res.status(404).json({ message: "Tasks not found for this user" });
+    }
+
     // Method to create a task
     static createTask(req: Request, res: Response) {
-        const { title, deadline, label, status } = req.body;
+        const { title, createdBy, deadline, label, status } = req.body;
 
         if (!title) res.status(400).json({ message: "title is required" });
+        if (!createdBy) res.status(400).json({ message: "createdBy is required" });
         if (!deadline) res.status(400).json({ message: "deadline is required" });
         if (!label) res.status(400).json({ message: "label is required" });
         if (!status) res.status(400).json({ message: "status is required" });
 
-        const newTask = TaskModel.create(title, deadline, label, status);
+        const newTask = TaskModel.create(title, createdBy, deadline, label, status);
         res.status(201).json(newTask);
     }
 
     // Method to update a specific task
     static updateTask(req: Request, res: Response) {
-        const { id, title, deadline, label, status } = req.body;
-        const updatedTask = TaskModel.update(id, title, deadline, label, status);
+        const { id, title, createdBy, deadline, label, status } = req.body;
+        const updatedTask = TaskModel.update(id, title, createdBy, deadline, label, status);
 
         updatedTask ? res.json(updatedTask) : res.status(404).json({ message: "Task not found" });
     }
