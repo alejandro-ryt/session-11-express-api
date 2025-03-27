@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 // __dirname is an environment variable that tells you the absolute path of the directory containing the currently executing file.
 const filePath = path.join(__dirname, "../../data/tasks.json");
 
+// https://www.typescriptlang.org/play/?#example/types-vs-interfaces
 interface Task {
     id: string;
     title: string;
@@ -27,6 +28,7 @@ const writeTasks = (tasks: Task[]) => {
     fs.writeFileSync(filePath, JSON.stringify(tasks, null, 2), "utf-8");
 };
 
+// https://www.typescriptlang.org/docs/handbook/2/classes.html#static-members
 export class TaskModel {
     static getAll(): Task[] {
         // Get the array of tasks based on the returned value of the function "readTasks"
@@ -50,7 +52,13 @@ export class TaskModel {
         return newTask;
     }
 
-    static update(id: string, title: string, deadline: Date, label: string, status: "toDo" | "inProgress" | "done"): Task | null {
+    static update(
+        id: string,
+        title: string,
+        deadline: Date,
+        label: string,
+        status: "toDo" | "inProgress" | "done"
+    ): Task | null {
         // Get the array of tasks based on the returned value of the function "readTasks"
         const tasks = readTasks();
         // Find the task with specified id, not return null
@@ -70,11 +78,11 @@ export class TaskModel {
         // Get the array of tasks based on the returned value of the function "readTasks"
         let tasks = readTasks();
         // Filter for the task that match the id inside the tasks array
-        const filteredTasks = tasks.filter(task => task.id !== id);
+        const filteredTasks = tasks.filter((task) => task.id !== id);
         // Creates a new array that includes only the tasks where the id does not match with the one we compared.
         if (tasks.length === filteredTasks.length) return false;
         // Write the filtered tasks array into the store file
         writeTasks(filteredTasks);
         return true;
-      }
+    }
 }
